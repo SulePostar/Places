@@ -1,0 +1,42 @@
+/* export const GlobalStyles = {
+  colors: {
+    primary50: '#e4fdd9',
+    primary100: '#c6fcaf',
+    primary200: '#a2f081',
+    primary400: '#57d421',
+    primary500: '#3ec304',
+    primary700: '#2d8906',
+    primary800: '#206403',
+    accent500: '#f7bc0c',
+    error50: '#fcc4e4',
+    error500: '#9b095c',
+    gray500: '#39324a',
+    gray700: '#221c30',
+  },
+}; */
+
+:root {
+  --primary50: #e0f2f1;
+  --primary100: #b2dfdb;
+  --primary200: #80cbc4;
+  --primary400: #26a69a;
+  --primary500: #009688;
+  --primary700: #00796b;
+  --primary800: #00695c;
+
+  --accent: #f7bc0c;
+  --error: #9b095c;
+  --gray: #39324a;
+}
+
+:root {
+  --primary50: #cfeffd;
+  --primary100: #a0defb;
+  --primary200: #77cff8;
+  --primary400: #44bdf5;
+  --primary500: #1aacf0;
+  --primary700: #0570c9;
+  --primary800: #003b88;
+  --accent500: #e6b30b;
+  --gray700: #221c30;
+};
