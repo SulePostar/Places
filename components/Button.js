@@ -15,6 +15,7 @@ export default function Button({ children, onPress, mode, style }) {
 
 const styles = StyleSheet.create({
   button: {
+    marginTop: 8,
     padding: 8,
     backgroundColor: Colors.primary500,
     borderRadius: 5,

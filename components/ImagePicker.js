@@ -4,7 +4,7 @@ import Button from './Button';
 import { Colors } from '../constants/colors';
 import { launchCameraAsync, useCameraPermissions } from 'expo-image-picker';
 
-export default function ImagePicker() {
+export default function ImagePicker({ onTakeImage }) {
 
   const [pickedImage, setPickedImage] = useState(null);
   const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
@@ -34,18 +34,19 @@ export default function ImagePicker() {
       quality: 0.5
     });
     setPickedImage(image.assets[0].uri);
-    console.log(JSON.stringify(image, null, 2)); //.assets[0].uri
+    onTakeImage(image.assets[0].uri);
+    // console.log(JSON.stringify(image, null, 2)); //.assets[0].uri
   }
 
-  let imagePreview = <View style={styles.imagePreview}><Text>No image taken yet.</Text></View>;
+  let imagePreview = <View><Text>No image taken yet.</Text></View>;
 
-  if (!!pickedImage) {
-    imagePreview = <Image source={{ uri: pickedImage }} style={styles.imagePreview} />;
-  }
+  if (!!pickedImage)
+    imagePreview = <Image source={{ uri: pickedImage }}
+      style={styles.image} />;
 
   return (
-    <View style={styles.container}>
-      <View>
+    <View>
+      <View style={styles.imagePreview}>
         {imagePreview}
       </View>
       <Button onPress={imageHandler}>Take image</Button>
@@ -54,22 +55,18 @@ export default function ImagePicker() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24
-  },
   imagePreview: {
     marginVertical: 8,
-    width: 320,
+    width: 310,
     height: 180,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.primary100,
+    borderRadius: 4
+  },
+  image: {
+    width: '100%',
+    height: '100%',
     borderRadius: 4
   }
 });

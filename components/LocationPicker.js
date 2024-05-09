@@ -2,13 +2,32 @@ import { Alert, StyleSheet, View, Text, Image } from "react-native";
 import { getCurrentPositionAsync, useForegroundPermissions } from "expo-location";
 import Button from "./Button";
 import { Colors } from "../constants/colors";
-import { useState } from "react";
-import { getMapPreview } from "../util/location";
+import { useState, useEffect } from "react";
+import { getAddress, getMapPreview } from "../util/location";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const LocationPicker = () => {
+const LocationPicker = ({ onPickLocation }) => {
 
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  const navigation = useNavigation();
+  const route = useRoute();
   const [locationPresmission, requestPermission] = useForegroundPermissions();
+
+  const pickedLocation = route.params ? { lat: route.params.pickedLat, lng: route.params.pickedLng } : { lat: 0, lng: 0 };
+
+  useEffect(() => {
+    if (!!pickedLocation) {
+      setLocation(pickedLocation);
+    }
+  }, [pickedLocation.lat, pickedLocation.lng]);
+
+  useEffect(() => {
+    const handleLocation = async () => {
+      const address = await getAddress(location.lat, location.lng);
+      onPickLocation(location, address);
+    }
+    if(location.lat !== 0 && location.lng !== 0) handleLocation();
+  }, [location.lat, location.lng]);
 
   const verifyPermissions = async () => {
     if (locationPresmission.status !== 'undetermined') {
@@ -28,7 +47,7 @@ const LocationPicker = () => {
       return;
     }
     const location = await getCurrentPositionAsync();
-    setLocation({ 
+    setLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude
     });
@@ -37,9 +56,13 @@ const LocationPicker = () => {
 
   let locationPreview = <View><Text>No location chosen yet.</Text></View>;
 
-  if(!!location) locationPreview = <Image source={{ uri: getMapPreview(location.lat, location.lng) }} style={styles.image} />;
+  if (!!location)
+    locationPreview = <Image source={{ uri: getMapPreview(location.lat, location.lng) }}
+      style={styles.image} />;
 
-  const pickOnMapHandler = () => {}
+  const pickOnMapHandler = () => {
+    navigation.navigate('Map');
+  }
 
   return (
     <View>
@@ -59,7 +82,7 @@ export default LocationPicker;
 const styles = StyleSheet.create({
   mapPreview: {
     marginVertical: 8,
-    width: 320,
+    width: 310,
     height: 180,
     justifyContent: 'center',
     alignItems: 'center',
@@ -73,6 +96,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    borderRadius: 4
   }
 });
